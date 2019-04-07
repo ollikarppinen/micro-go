@@ -1,19 +1,10 @@
-FROM golang:1.9 as builder
-
-WORKDIR /go/src/micro-go/consignment-cli
-
-COPY . .
-
-RUN go get -u github.com/golang/dep/cmd/dep
-
-RUN echo $GOPATH
-RUN dep init && dep ensure
-
 FROM alpine:latest
 
-RUN apk --no-cache add ca-certificates
+RUN mkdir -p /app
+WORKDIR /app
 
-COPY --from=builder /home/olli/repos/micro-go/consignment-cli .
+ADD consignment.json /app/consignment.json
+ADD consignment-cli /app/consignment-cli
 
 CMD ["./consignment-cli"]
 
